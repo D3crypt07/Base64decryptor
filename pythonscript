@@ -1,0 +1,29 @@
+import base64
+from Crypto.Cipher import AES
+
+def decrypt_string(encrypted_string, encrypted_password, encrypted_iv, encrypted_key):
+    try:
+        password = base64.b64decode(encrypted_password)
+        iv = base64.b64decode(encrypted_iv)
+        key = base64.b64decode(encrypted_key)
+        
+        cipher = AES.new(key, AES.MODE_CBC, iv)
+        
+        encrypted_bytes = base64.b64decode(encrypted_string)
+        decrypted_bytes = cipher.decrypt(encrypted_bytes)
+        
+        decrypted_text = decrypted_bytes.decode('utf-8')
+        
+        return decrypted_text
+    except Exception as e:
+        print(f"Error decrypting string: {str(e)}")
+
+# Example usage
+encrypted_string = input("Enter the Base64-encoded string to decrypt: ")
+encrypted_password = input("Enter the Base64-encoded password: ")
+encrypted_iv = input("Enter the Base64-encoded IV: ")
+encrypted_key = input("Enter the Base64-encoded key: ")
+
+decrypted_text = decrypt_string(encrypted_string, encrypted_password, encrypted_iv, encrypted_key)
+if decrypted_text:
+    print(f"Decrypted text: {decrypted_text}")
